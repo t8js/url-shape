@@ -1,0 +1,27 @@
+{
+  "name": "url-shape",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx npm-run-all clean -p compile compile-tests",
+    "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
+    "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral --external:path-to-regexp --external:query-string",
+    "compile-tests": "npx esbuild tests.ts --bundle --outdir=dist --platform=neutral",
+    "prepublishOnly": "npm run build",
+    "preversion": "npx npm-run-all shape build test",
+    "shape": "npx codeshape",
+    "test": "node dist/tests.js"
+  },
+  "author": "axtk",
+  "license": "ISC",
+  "dependencies": {
+    "path-to-regexp": "^8.2.0",
+    "query-string": "^9.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "zod": "^3.25.63"
+  }
+}
