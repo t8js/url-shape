@@ -1,3 +1,4 @@
+import {URLValidationError} from '../URLValidationError';
 import type {URLMapSchema} from '../types/URLMapSchema';
 import {getOrigin} from './getOrigin';
 import {getPath} from './getPath';
@@ -5,7 +6,6 @@ import {getQuery} from './getQuery';
 import {validateParams} from './validateParams';
 import {validateQuery} from './validateQuery';
 import {withEqualOrigin} from './withEqualOrigin';
-import {URLValidationError} from '../URLValidationError';
 
 export function validate<S extends URLMapSchema>(
     location: string | null | undefined,

@@ -13,8 +13,7 @@ export function validateQuery(
         let parseResult = parse(query, querySchema);
 
         return parseResult !== null && typeof parseResult === 'object';
-    }
-    catch {
+    } catch {
         return false;
     }
 }

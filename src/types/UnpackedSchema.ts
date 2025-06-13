@@ -5,6 +5,6 @@ export type UnpackedSchema<
     ? T['_zod']['output']
     : T extends {_output: Record<string, unknown> | string}
       ? T['_output']
-    : T extends {__outputType: Record<string, unknown> | string}
-      ? T['__outputType']
-      : Fallback;
+      : T extends {__outputType: Record<string, unknown> | string}
+        ? T['__outputType']
+        : Fallback;

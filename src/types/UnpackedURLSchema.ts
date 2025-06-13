@@ -14,18 +14,18 @@ import type {UnpackedSchema} from './UnpackedSchema';
 //       };
 
 export type UnpackedURLSchema<T extends URLSchema> = T extends null
-    ? void
-    : NonNullable<T> extends {params: unknown, query: unknown}
-        ? {
+    ? undefined
+    : NonNullable<T> extends {params: unknown; query: unknown}
+      ? {
             params: UnpackedSchema<NonNullable<T>['params']>;
             query: UnpackedSchema<NonNullable<T>['query']>;
         }
-        : NonNullable<T> extends {params: unknown}
+      : NonNullable<T> extends {params: unknown}
         ? {
-            params: UnpackedSchema<NonNullable<T>['params']>;
-        }
+              params: UnpackedSchema<NonNullable<T>['params']>;
+          }
         : NonNullable<T> extends {query: unknown}
-        ? {
-            query: UnpackedSchema<NonNullable<T>['query']>;
-        }
-        : void;
+          ? {
+                query: UnpackedSchema<NonNullable<T>['query']>;
+            }
+          : undefined;

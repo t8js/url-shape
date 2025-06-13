@@ -18,7 +18,9 @@ type DefaultURLBuilderDataShape = {
 export function getURLBuilder<S extends URLMapSchema>(schema: S) {
     return <P extends keyof S>(
         pattern: S extends null ? string : P,
-        data?: S extends null ? DefaultURLBuilderDataShape : UnpackedURLSchema<NonNullable<S>[P]>,
+        data?: S extends null
+            ? DefaultURLBuilderDataShape
+            : UnpackedURLSchema<NonNullable<S>[P]>,
     ) => {
         let url = String(pattern);
 
@@ -45,7 +47,8 @@ export function getURLBuilder<S extends URLMapSchema>(schema: S) {
                 urlPath = toPath(pathParams);
             }
 
-            if ('query' in data && data.query) urlQuery = queryString.stringify(data.query);
+            if ('query' in data && data.query)
+                urlQuery = queryString.stringify(data.query);
 
             if (urlQuery !== '' && !urlQuery.startsWith('?'))
                 urlQuery = `?${urlQuery}`;
@@ -65,7 +68,8 @@ export function getURLBuilder<S extends URLMapSchema>(schema: S) {
             _schema: urlSchema,
             href: url,
             exec: (location: string) => {
-                if (!withEqualOrigin(getOrigin(location), urlOrigin)) return null;
+                if (!withEqualOrigin(getOrigin(location), urlOrigin))
+                    return null;
 
                 let paramsSchema = urlSchema?.params;
                 let params: UnpackedSchema<typeof paramsSchema> | null = {};

@@ -19,8 +19,7 @@ export function validateParams(
         let parseResult = parse(matchResult.params, paramsSchema);
 
         return parseResult !== null && typeof parseResult === 'object';
-    }
-    catch {
+    } catch {
         return false;
     }
 }
