@@ -1,3 +1,5 @@
+export * from './src/types/Pattern';
+export * from './src/types/PatternObject';
 export * from './src/types/Schema';
 export * from './src/types/UnpackedSchema';
 export * from './src/types/UnpackedURLSchema';
@@ -5,4 +7,5 @@ export * from './src/types/URLMapSchema';
 export * from './src/types/URLMapSchemaEntry';
 export * from './src/types/URLSchema';
 export * from './src/types/URLValidationErrorCode';
+export * from './src/utils/isPatternObject';
 export * from './src/createURLSchema';

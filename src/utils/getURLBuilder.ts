@@ -22,7 +22,7 @@ export function getURLBuilder<S extends URLMapSchema>(schema: S) {
         return {
             _pattern: pattern,
             _schema: urlSchema,
-            href: url,
+            href: url as P,
             exec: (location: string) => match<S>(location, url, urlSchema),
             toString: () => url,
         };

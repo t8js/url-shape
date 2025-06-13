@@ -17,20 +17,28 @@ export function match<
 >(
     url: string,
     pattern: string,
+    // undefined: any parameters
+    // null: no parameters
     urlSchema?: U,
 ) {
     if (!withEqualOrigin(getOrigin(url), getOrigin(pattern)))
         return null;
 
     let paramsSchema = urlSchema?.params;
-    let params: UnpackedSchema<typeof paramsSchema> | null = {};
+    let params: UnpackedSchema<
+        typeof paramsSchema,
+        Record<string, string | string[] | undefined>
+    > | null = {};
 
     let querySchema = urlSchema?.query;
-    let query: UnpackedSchema<typeof querySchema> | null = {};
+    let query: UnpackedSchema<
+        typeof querySchema,
+        Record<string, string | (string | null)[] | null>
+    > | null = {};
 
     let hash = getHash(url);
 
-    if (!urlSchema) {
+    if (urlSchema === null) {
         if (url !== pattern) return null;
 
         return {
@@ -43,30 +51,32 @@ export function match<
     }
 
     let matchPattern = matchParams(getPath(pattern));
-    let matchResult = matchPattern(getPath(url));
+    let paramsMatch = matchPattern(getPath(url));
 
-    if (matchResult === false) return null;
+    if (paramsMatch === false) return null;
 
     if (paramsSchema) {
         try {
-            params = parse(matchResult.params, paramsSchema);
+            params = parse(paramsMatch.params, paramsSchema);
         } catch {}
 
         if (params === null || typeof params !== 'object')
             return null;
     }
+    else params = paramsMatch.params;
+
+    let queryMatch = queryString.parse(getQuery(url));
 
     if (querySchema) {
         try {
-            query = parse(
-                queryString.parse(getQuery(url)),
-                querySchema,
-            );
+            query = parse(queryMatch, querySchema);
         } catch {}
 
         if (query === null || typeof query !== 'object')
             return null;
     }
+    else if (queryMatch !== null)
+        query = queryMatch;
 
     return {
         input: url,
