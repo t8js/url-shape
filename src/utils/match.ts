@@ -1,6 +1,7 @@
 import {match as matchParams} from 'path-to-regexp';
 import queryString from 'query-string';
 import type {URLMapSchema} from '../types/URLMapSchema';
+import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import type {UnpackedSchema} from '../types/UnpackedSchema';
 import {getHash} from './getHash';
 import {getOrigin} from './getOrigin';
@@ -9,10 +10,14 @@ import {getQuery} from './getQuery';
 import {parse} from './parse';
 import {withEqualOrigin} from './withEqualOrigin';
 
-export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
+export function match<
+    S extends URLMapSchema,
+    P extends keyof S = keyof S,
+    U extends URLMapSchemaEntry<S, P> = URLMapSchemaEntry<S, P>
+>(
     url: string,
     pattern: string,
-    urlSchema?: NonNullable<S>[S extends null ? string : P],
+    urlSchema?: U,
 ) {
     if (!withEqualOrigin(getOrigin(url), getOrigin(pattern)))
         return null;

@@ -1,13 +1,12 @@
-import {URLValidationError} from '../URLValidationError';
 import type {URLMapSchema} from '../types/URLMapSchema';
-import {getOrigin} from './getOrigin';
-import {getPath} from './getPath';
-import {getQuery} from './getQuery';
-import {validateParams} from './validateParams';
-import {validateQuery} from './validateQuery';
-import {withEqualOrigin} from './withEqualOrigin';
+import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
+import {match} from './match';
 
-export function validate<S extends URLMapSchema>(
+export function validate<
+    S extends URLMapSchema,
+    P extends keyof S = keyof S,
+    U extends URLMapSchemaEntry<S, P> = URLMapSchemaEntry<S, P>
+>(
     location: string | null | undefined,
     schema: S,
 ): boolean {
@@ -20,36 +19,10 @@ export function validate<S extends URLMapSchema>(
 
     if (url === undefined) return true;
 
-    let urlOrigin = getOrigin(url);
-    let urlPath = getPath(url);
-    let urlQuery = getQuery(url);
-
-    let found = false;
-
     for (let [urlPattern, urlSchema] of Object.entries(schema)) {
-        if (urlSchema === null) {
-            if (url === urlPattern) return true;
-
-            continue;
-        }
-
-        if (!withEqualOrigin(urlOrigin, getOrigin(urlPattern))) continue;
-
-        let hasValidParams = validateParams(
-            urlPath,
-            getPath(urlPattern),
-            urlSchema.params,
-        );
-
-        if (!hasValidParams) continue;
-
-        found = true;
-
-        if (validateQuery(urlQuery, urlSchema.query)) return true;
+        if (match<S>(url, urlPattern, urlSchema as U) !== null)
+            return true;
     }
 
-    if (!found)
-        throw new URLValidationError('not_found', 'No such URL in schema');
-
-    throw new URLValidationError('invalid', 'Invalid URL');
+    return false;
 }

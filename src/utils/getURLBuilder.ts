@@ -1,4 +1,5 @@
 import type {URLMapSchema} from '../types/URLMapSchema';
+import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import type {UnpackedURLSchema} from '../types/UnpackedURLSchema';
 import {build} from './build';
 import {match} from './match';
@@ -9,20 +10,20 @@ type DefaultURLBuilderDataShape = {
 };
 
 export function getURLBuilder<S extends URLMapSchema>(schema: S) {
-    return <P extends keyof S>(
+    return <P extends keyof S, U extends URLMapSchemaEntry<S, P>>(
         pattern: S extends null ? string : P,
         data?: S extends null
             ? DefaultURLBuilderDataShape
             : UnpackedURLSchema<NonNullable<S>[P]>,
     ) => {
         let url = build<S>(pattern, data);
-        let urlSchema = (schema as S)?.[pattern];
+        let urlSchema = (schema as S)?.[pattern] as U;
 
         return {
             _pattern: pattern,
             _schema: urlSchema,
             href: url,
-            exec: (location: string) => match<S, P>(location, url, urlSchema),
+            exec: (location: string) => match<S>(location, url, urlSchema),
             toString: () => url,
         };
     };
