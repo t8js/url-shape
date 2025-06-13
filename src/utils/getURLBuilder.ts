@@ -10,20 +10,20 @@ type DefaultURLBuilderDataShape = {
 };
 
 export function getURLBuilder<S extends URLMapSchema>(schema: S) {
-    return <P extends keyof S, U extends URLMapSchemaEntry<S, P>>(
+    return <P extends keyof S>(
         pattern: S extends null ? string : P,
         data?: S extends null
             ? DefaultURLBuilderDataShape
             : UnpackedURLSchema<NonNullable<S>[P]>,
     ) => {
-        let url = build<S>(pattern, data);
-        let urlSchema = (schema as S)?.[pattern] as U;
+        let url = build<S, P>(pattern, data);
+        let urlSchema = (schema as S)?.[pattern] as URLMapSchemaEntry<S, P>;
 
         return {
             _pattern: pattern,
             _schema: urlSchema,
             href: url as P,
-            exec: (location: string) => match<S>(location, url, urlSchema),
+            exec: (location: string) => match<S, P>(location, url, urlSchema),
             toString: () => url,
         };
     };

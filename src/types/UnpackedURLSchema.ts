@@ -11,9 +11,11 @@ export type UnpackedURLSchema<T extends URLSchema> = T extends null
       : NonNullable<T> extends {params: unknown}
         ? {
               params: UnpackedSchema<NonNullable<T>['params']>;
+              query?: Record<string, never>;
           }
         : NonNullable<T> extends {query: unknown}
           ? {
+                params?: Record<string, never>;
                 query: UnpackedSchema<NonNullable<T>['query']>;
             }
           : undefined;

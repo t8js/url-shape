@@ -4,8 +4,7 @@ import {match} from './match';
 
 export function validate<
     S extends URLMapSchema,
-    P extends keyof S = keyof S,
-    U extends URLMapSchemaEntry<S, P> = URLMapSchemaEntry<S, P>
+    P extends keyof S = keyof S
 >(
     url: string,
     schema: S,
@@ -13,7 +12,7 @@ export function validate<
     if (schema === null || schema === undefined) return true;
 
     for (let [urlPattern, urlSchema] of Object.entries(schema)) {
-        if (match<S>(url, urlPattern, urlSchema as U) !== null)
+        if (match<S, P>(url, urlPattern, urlSchema as URLMapSchemaEntry<S, P>) !== null)
             return true;
     }
 

@@ -2,7 +2,8 @@ import {match as matchParams} from 'path-to-regexp';
 import queryString from 'query-string';
 import type {URLMapSchema} from '../types/URLMapSchema';
 import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
-import type {UnpackedSchema} from '../types/UnpackedSchema';
+import type {UnpackedParamsSchema} from '../types/UnpackedParamsSchema';
+import type {UnpackedQuerySchema} from '../types/UnpackedQuerySchema';
 import {getHash} from './getHash';
 import {getOrigin} from './getOrigin';
 import {getPath} from './getPath';
@@ -12,29 +13,23 @@ import {withEqualOrigin} from './withEqualOrigin';
 
 export function match<
     S extends URLMapSchema,
-    P extends keyof S = keyof S,
-    U extends URLMapSchemaEntry<S, P> = URLMapSchemaEntry<S, P>
+    P extends keyof S = keyof S
 >(
     url: string,
     pattern: string,
-    // undefined: any parameters
-    // null: no parameters
-    urlSchema?: U,
+    urlSchema?: URLMapSchemaEntry<S, P>,
 ) {
     if (!withEqualOrigin(getOrigin(url), getOrigin(pattern)))
         return null;
 
+    type Params = UnpackedParamsSchema<S, P>;
+    type Query = UnpackedQuerySchema<S, P>;
+
     let paramsSchema = urlSchema?.params;
-    let params: UnpackedSchema<
-        typeof paramsSchema,
-        Record<string, string | string[] | undefined>
-    > | null = {};
+    let params = {} as Params | null;
 
     let querySchema = urlSchema?.query;
-    let query: UnpackedSchema<
-        typeof querySchema,
-        Record<string, string | (string | null)[] | null>
-    > | null = {};
+    let query = {} as Query | null;
 
     let hash = getHash(url);
 
@@ -63,7 +58,7 @@ export function match<
         if (params === null || typeof params !== 'object')
             return null;
     }
-    else params = paramsMatch.params;
+    else params = paramsMatch.params as Params;
 
     let queryMatch = queryString.parse(getQuery(url));
 
@@ -76,7 +71,7 @@ export function match<
             return null;
     }
     else if (queryMatch !== null)
-        query = queryMatch;
+        query = queryMatch as Query;
 
     return {
         input: url,
