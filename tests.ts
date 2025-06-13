@@ -72,8 +72,14 @@ assert(
 );
 assert(url('/search').exec('/search?view=compact') === null);
 
-assert(JSON.stringify(match('/sections/:id', '/sections/10')?.params) === '{"id":10}');
-assert(JSON.stringify(match(url('/sections/:id'), '/sections/10')?.params) === '{"id":10}');
+assert(
+    JSON.stringify(match('/sections/:id', '/sections/10')?.params) ===
+        '{"id":10}',
+);
+assert(
+    JSON.stringify(match(url('/sections/:id'), '/sections/10')?.params) ===
+        '{"id":10}',
+);
 
 assert(match('/sections/:id', '/x') === null);
 assert(match(url('/sections/:id'), '/x') === null);
@@ -86,8 +92,14 @@ let {url: url2, match: match2, validate: validate2} = createURLSchema(null);
 assert(url2('/').toString() === '/');
 assert(url2('/sections/:id', {params: {id: 'x'}}).toString() === '/sections/x');
 
-assert(JSON.stringify(match2('/sections/:id', '/sections/10')?.params) === '{"id":"10"}');
-assert(JSON.stringify(match2('/x/:name', '/x/intro')?.params) === '{"name":"intro"}');
+assert(
+    JSON.stringify(match2('/sections/:id', '/sections/10')?.params) ===
+        '{"id":"10"}',
+);
+assert(
+    JSON.stringify(match2('/x/:name', '/x/intro')?.params) ===
+        '{"name":"intro"}',
+);
 assert(JSON.stringify(match2('/test', '/test')?.params) === '{}');
 assert(match2('/test', '/text') === null);
 

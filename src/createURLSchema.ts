@@ -1,17 +1,19 @@
-import type {URLMapSchema} from './types/URLMapSchema';
 import type {Pattern} from './types/Pattern';
-import {getURLBuilder} from './utils/getURLBuilder';
-import {validate} from './utils/validate';
-import {match} from './utils/match';
-import {isPatternObject} from './utils/isPatternObject';
+import type {URLMapSchema} from './types/URLMapSchema';
 import type {URLMapSchemaEntry} from './types/URLMapSchemaEntry';
+import {getURLBuilder} from './utils/getURLBuilder';
+import {isPatternObject} from './utils/isPatternObject';
+import {match} from './utils/match';
+import {validate} from './utils/validate';
 
 export function createURLSchema<S extends URLMapSchema>(schema: S) {
     return {
         url: getURLBuilder<S>(schema),
         validate: (url: string) => validate<S>(url, schema),
         match: <P extends keyof S>(pattern: Pattern<S, P>, url: string) => {
-            let stringPattern = isPatternObject<S>(pattern) ? pattern.href : pattern;
+            let stringPattern = isPatternObject<S>(pattern)
+                ? pattern.href
+                : pattern;
 
             return match<S, P>(
                 url,

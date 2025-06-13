@@ -27,8 +27,7 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
 
     if (data !== null && data !== undefined) {
         if ('params' in data && data.params) {
-            let pathParams: Record<string, string | string[] | undefined> =
-                {};
+            let pathParams: Record<string, string | string[] | undefined> = {};
 
             for (let [key, value] of Object.entries(data.params)) {
                 if (value === null) continue;
@@ -51,6 +50,6 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
 
         url = `${urlOrigin}${urlPath}${urlQuery}${urlHash}`;
     }
-    
+
     return url;
 }

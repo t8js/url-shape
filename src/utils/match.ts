@@ -11,16 +11,12 @@ import {getQuery} from './getQuery';
 import {parse} from './parse';
 import {withEqualOrigin} from './withEqualOrigin';
 
-export function match<
-    S extends URLMapSchema,
-    P extends keyof S = keyof S
->(
+export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
     url: string,
     pattern: string,
     urlSchema?: URLMapSchemaEntry<S, P>,
 ) {
-    if (!withEqualOrigin(getOrigin(url), getOrigin(pattern)))
-        return null;
+    if (!withEqualOrigin(getOrigin(url), getOrigin(pattern))) return null;
 
     type Params = UnpackedParamsSchema<S, P>;
     type Query = UnpackedQuerySchema<S, P>;
@@ -55,10 +51,8 @@ export function match<
             params = parse(paramsMatch.params, paramsSchema);
         } catch {}
 
-        if (params === null || typeof params !== 'object')
-            return null;
-    }
-    else params = paramsMatch.params as Params;
+        if (params === null || typeof params !== 'object') return null;
+    } else params = paramsMatch.params as Params;
 
     let queryMatch = queryString.parse(getQuery(url));
 
@@ -67,11 +61,8 @@ export function match<
             query = parse(queryMatch, querySchema);
         } catch {}
 
-        if (query === null || typeof query !== 'object')
-            return null;
-    }
-    else if (queryMatch !== null)
-        query = queryMatch as Query;
+        if (query === null || typeof query !== 'object') return null;
+    } else if (queryMatch !== null) query = queryMatch as Query;
 
     return {
         input: url,
