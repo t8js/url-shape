@@ -1,7 +1,7 @@
 import type {Schema} from 'unpack-schema';
 
 export type URLSchema = {
-    params?: Schema;
-    query?: Schema;
+    params?: Schema<Record<string, unknown>>;
+    query?: Schema<Record<string, unknown>>;
     // hash?: Schema;
 } | null;
