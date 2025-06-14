@@ -1,5 +1,5 @@
 import {match} from 'path-to-regexp';
-import type {Schema} from '../types/Schema';
+import type {Schema} from 'unpack-schema';
 import {parse} from './parse';
 
 export function validateParams(

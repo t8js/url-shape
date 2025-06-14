@@ -1,4 +1,4 @@
-import type {Schema} from '../types/Schema';
+import type {Schema} from 'unpack-schema';
 
 export function parse<T>(value: unknown, schema: Schema) {
     let parseResult: T | null = null;

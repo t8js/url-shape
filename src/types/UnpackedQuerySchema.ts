@@ -1,5 +1,5 @@
+import type {UnpackedSchema} from 'unpack-schema';
 import type {URLMapSchema} from '../types/URLMapSchema';
-import type {UnpackedSchema} from '../types/UnpackedSchema';
 
 export type UnpackedQuerySchema<
     S extends URLMapSchema,

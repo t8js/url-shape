@@ -1,5 +1,5 @@
+import type {UnpackedSchema} from 'unpack-schema';
 import type {URLSchema} from './URLSchema';
-import type {UnpackedSchema} from './UnpackedSchema';
 
 export type UnpackedURLSchema<T extends URLSchema> = T extends null
     ? undefined

@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import type {Schema} from '../types/Schema';
+import type {Schema} from 'unpack-schema';
 import {parse} from './parse';
 
 export function validateQuery(

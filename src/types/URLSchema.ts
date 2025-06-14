@@ -1,4 +1,4 @@
-import type {Schema} from './Schema';
+import type {Schema} from 'unpack-schema';
 
 export type URLSchema = {
     params?: Schema;
