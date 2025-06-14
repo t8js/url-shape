@@ -19,7 +19,7 @@
   "dependencies": {
     "path-to-regexp": "^8.2.0",
     "query-string": "^9.2.0",
-    "unpack-schema": "^1.0.0"
+    "unpack-schema": "^1.0.2"
   },
   "devDependencies": {
     "@types/node": "^24.0.1",
