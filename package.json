@@ -20,6 +20,15 @@
     "type": "git",
     "url": "git://github.com/axtk/url-shape.git"
   },
+  "keywords": [
+    "url builder",
+    "url",
+    "schema",
+    "typed schema",
+    "type-safe",
+    "zod",
+    "yup"
+  ],
   "dependencies": {
     "path-to-regexp": "^8.2.0",
     "query-string": "^9.2.0",
