@@ -1,9 +1,6 @@
 import type {PatternObject} from '../types/PatternObject';
-import type {URLMapSchema} from '../types/URLMapSchema';
 
-export function isPatternObject<S extends URLMapSchema>(
-    x: unknown,
-): x is PatternObject<S> {
+export function isPatternObject(x: unknown): x is PatternObject {
     return (
         x !== null &&
         typeof x === 'object' &&

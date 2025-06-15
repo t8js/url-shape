@@ -11,7 +11,7 @@ export function createURLSchema<S extends URLMapSchema>(schema: S) {
         url: getURLBuilder<S>(schema),
         validate: (url: string) => validate<S>(url, schema),
         match: <P extends keyof S>(pattern: Pattern<S, P>, url: string) => {
-            let stringPattern = isPatternObject<S>(pattern)
+            let stringPattern = isPatternObject(pattern)
                 ? pattern.href
                 : pattern;
 

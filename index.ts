@@ -1,6 +1,5 @@
 export * from './src/types/Pattern';
 export * from './src/types/PatternObject';
-export * from './src/types/PatternString';
 export * from './src/types/UnpackedParamsSchema';
 export * from './src/types/UnpackedQuerySchema';
 export * from './src/types/UnpackedURLSchema';

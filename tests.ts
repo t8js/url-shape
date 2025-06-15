@@ -50,6 +50,10 @@ assert(
     url('/search', {query: {term: 'x', view: 'full'}}).toString() ===
         '/search?term=x&view=full',
 );
+assert(
+    url('/search', {query: {term: 'x', view: 'full'}}).href ===
+        '/search?term=x&view=full',
+);
 
 assert(url('/search').exec('/x') === null);
 assert(
