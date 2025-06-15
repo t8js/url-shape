@@ -1,7 +1,7 @@
 {
   "name": "url-shape",
   "version": "0.1.4",
-  "description": "",
+  "description": "Type-safe schema-based URL builder",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
@@ -16,6 +16,10 @@
   },
   "author": "axtk",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axtk/url-shape.git"
+  },
   "dependencies": {
     "path-to-regexp": "^8.2.0",
     "query-string": "^9.2.0",
