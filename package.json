@@ -1,6 +1,6 @@
 {
   "name": "url-shape",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "description": "Type-safe schema-based URL builder",
   "type": "module",
   "main": "dist/index.js",
