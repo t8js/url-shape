@@ -1,4 +1,4 @@
-import type {UnpackedURLSchema} from '../types/UnpackedURLSchema';
+import type {UnpackedURLSchema} from 'unpack-schema';
 import type {URLMapSchema} from '../types/URLMapSchema';
 import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import {build} from './build';
