@@ -5,8 +5,8 @@ import {build} from './build';
 import {match} from './match';
 
 type DefaultURLBuilderDataShape = {
-    params?: Record<string, unknown>;
-    query?: Record<string, unknown>;
+    params?: Record<string, unknown> | undefined;
+    query?: Record<string, unknown> | undefined;
 };
 
 export function getURLBuilder<S extends URLMapSchema>(schema: S) {
