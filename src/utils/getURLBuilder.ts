@@ -24,6 +24,7 @@ export function getURLBuilder<S extends URLMapSchema>(schema: S) {
             _schema: urlSchema,
             href: url,
             exec: (location: string) => match<S, P>(location, url, urlSchema),
+            compile: (input: typeof data) => build<S, P>(pattern, input),
             toString: () => url,
         };
     };

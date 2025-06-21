@@ -36,6 +36,9 @@ url('/sections/:id', {params: {id: 10}}).href // '/sections/10'
 url('/sections/:id').exec('/sections/42') // {params: {id: 42}}
 url('/sections/:id').exec('/x/42') // null
 
+url('/sections/:id').compile({params: {id: 10}}) // '/sections/10'
+url('/search').compile({query: {term: 'shape'}}) // '/search?term=shape'
+
 match('/sections/:id', '/sections/10') // {params: {id: 10}}
 match('/sections/:id', '/x') // null
 
