@@ -1,3 +1,3 @@
 export function getOrigin(url: string) {
-    return url.match(/^((https?:)?\/\/[^\/]+)(\/.*|$)/)?.[1] ?? '';
+    return url.match(/^((https?:)?\/\/[^/]+)(\/.*|$)/)?.[1] ?? '';
 }

@@ -2,7 +2,7 @@ export function getPath(url: string) {
     return (
         url
             // strip origin
-            .replace(/^((https?:)?\/\/[^\/]+)/, '')
+            .replace(/^((https?:)?\/\/[^/]+)/, '')
             // strip query
             .replace(/\?.*$/, '')
             // strip hash

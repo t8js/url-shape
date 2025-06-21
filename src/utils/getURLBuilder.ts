@@ -1,6 +1,6 @@
+import type {UnpackedURLSchema} from '../types/UnpackedURLSchema';
 import type {URLMapSchema} from '../types/URLMapSchema';
 import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
-import type {UnpackedURLSchema} from '../types/UnpackedURLSchema';
 import {build} from './build';
 import {match} from './match';
 

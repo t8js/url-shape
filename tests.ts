@@ -77,8 +77,13 @@ assert(
 assert(url('/search').exec('/search?view=compact') === null);
 
 assert(url('/sections/:id').compile({params: {id: 10}}) === '/sections/10');
-assert(url('/search').compile({query: {term: 'shape'}}) === '/search?term=shape');
-assert(url('/search').compile({query: {term: 'shape', view: 'compact'}}) === '/search?term=shape&view=compact');
+assert(
+    url('/search').compile({query: {term: 'shape'}}) === '/search?term=shape',
+);
+assert(
+    url('/search').compile({query: {term: 'shape', view: 'compact'}}) ===
+        '/search?term=shape&view=compact',
+);
 
 assert(
     JSON.stringify(match('/sections/:id', '/sections/10')?.params) ===

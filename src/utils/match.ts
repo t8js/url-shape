@@ -1,9 +1,9 @@
 import {match as matchParams} from 'path-to-regexp';
 import queryString from 'query-string';
-import type {URLMapSchema} from '../types/URLMapSchema';
-import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import type {UnpackedParamsSchema} from '../types/UnpackedParamsSchema';
 import type {UnpackedQuerySchema} from '../types/UnpackedQuerySchema';
+import type {URLMapSchema} from '../types/URLMapSchema';
+import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import {getHash} from './getHash';
 import {getOrigin} from './getOrigin';
 import {getPath} from './getPath';
