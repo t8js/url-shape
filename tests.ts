@@ -15,6 +15,8 @@ function assert(predicate: boolean) {
     }
 }
 
+console.log('fixed, params, query');
+
 let {url, match, validate} = createURLSchema({
     '/': null,
     '/sections/:id': {
@@ -100,6 +102,8 @@ assert(match(url('/sections/:id'), '/x') === null);
 assert(validate('/sections/10') === true);
 assert(validate('/x') === false);
 
+console.log('\nnull schema');
+
 let {url: url2, match: match2, validate: validate2} = createURLSchema(null);
 
 assert(url2('/').toString() === '/');
@@ -119,5 +123,4 @@ assert(match2('/test', '/text') === null);
 assert(validate2('/sections/10') === true);
 assert(validate2('/x') === true);
 
-console.log();
-console.log('passed');
+console.log('\npassed');

@@ -8,7 +8,7 @@ import {getHash} from './getHash';
 import {getOrigin} from './getOrigin';
 import {getPath} from './getPath';
 import {getQuery} from './getQuery';
-import {parse} from './parse';
+import {parseObject} from './parseObject';
 import {withEqualOrigin} from './withEqualOrigin';
 
 export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
@@ -46,19 +46,17 @@ export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
 
     if (paramsMatch === false) return null;
 
-    if (paramsSchema) {
-        params = parse(paramsMatch.params, paramsSchema);
+    params = parseObject(paramsMatch.params, paramsSchema);
 
-        if (params === null || typeof params !== 'object') return null;
-    } else params = paramsMatch.params as Params;
+    if (paramsSchema && params === null)
+        return null;
 
     let queryMatch = queryString.parse(getQuery(url));
 
-    if (querySchema) {
-        query = parse(queryMatch, querySchema);
+    query = parseObject(queryMatch, querySchema);
 
-        if (query === null || typeof query !== 'object') return null;
-    } else if (queryMatch !== null) query = queryMatch as Query;
+    if (querySchema && query === null)
+        return null;
 
     return {
         input: url,
