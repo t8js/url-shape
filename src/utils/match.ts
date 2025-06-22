@@ -47,9 +47,7 @@ export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
     if (paramsMatch === false) return null;
 
     if (paramsSchema) {
-        try {
-            params = parse(paramsMatch.params, paramsSchema);
-        } catch {}
+        params = parse(paramsMatch.params, paramsSchema);
 
         if (params === null || typeof params !== 'object') return null;
     } else params = paramsMatch.params as Params;
@@ -57,9 +55,7 @@ export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
     let queryMatch = queryString.parse(getQuery(url));
 
     if (querySchema) {
-        try {
-            query = parse(queryMatch, querySchema);
-        } catch {}
+        query = parse(queryMatch, querySchema);
 
         if (query === null || typeof query !== 'object') return null;
     } else if (queryMatch !== null) query = queryMatch as Query;
