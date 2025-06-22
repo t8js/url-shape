@@ -20,8 +20,7 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
 ) {
     let url = String(pattern);
 
-    if (data === null || data === undefined)
-        return url;
+    if (data === null || data === undefined) return url;
 
     let urlOrigin = getOrigin(url);
     let urlPath = getPath(url);
@@ -47,8 +46,7 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
     if ('query' in data && data.query)
         urlQuery = queryString.stringify(data.query);
 
-    if (urlQuery !== '' && !urlQuery.startsWith('?'))
-        urlQuery = `?${urlQuery}`;
+    if (urlQuery !== '' && !urlQuery.startsWith('?')) urlQuery = `?${urlQuery}`;
 
     url = `${urlOrigin}${urlPath}${urlQuery}${urlHash}`;
 
