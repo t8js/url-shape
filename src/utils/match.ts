@@ -48,15 +48,13 @@ export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
 
     params = parseObject(paramsMatch.params, paramsSchema);
 
-    if (paramsSchema && params === null)
-        return null;
+    if (paramsSchema && params === null) return null;
 
     let queryMatch = queryString.parse(getQuery(url));
 
     query = parseObject(queryMatch, querySchema);
 
-    if (querySchema && query === null)
-        return null;
+    if (querySchema && query === null) return null;
 
     return {
         input: url,

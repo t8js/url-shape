@@ -130,15 +130,19 @@ let {url: url3} = createURLSchema({
         params: z.object({
             id: z.coerce.number(),
         }),
-        query: z.optional(z.object({
-            x: z.coerce.number(),
-            y: z.coerce.number(),
-        })),
+        query: z.optional(
+            z.object({
+                x: z.coerce.number(),
+                y: z.coerce.number(),
+            }),
+        ),
     },
     '/x{/:name}': {
-        params: z.optional(z.object({
-            name: z.string(),
-        })),
+        params: z.optional(
+            z.object({
+                name: z.string(),
+            }),
+        ),
     },
 });
 
@@ -160,7 +164,10 @@ assert(url3('/x{/:name}', {params: {name: 'shape'}}).toString() === '/x/shape');
 
 assert(JSON.stringify(url3('/x{/:name}').exec('/x')?.params) === '{}');
 assert(JSON.stringify(url3('/x{/:name}').exec('/x')?.query) === '{}');
-assert(JSON.stringify(url3('/x{/:name}').exec('/x/shape')?.params) === '{"name":"shape"}');
+assert(
+    JSON.stringify(url3('/x{/:name}').exec('/x/shape')?.params) ===
+        '{"name":"shape"}',
+);
 assert(JSON.stringify(url3('/x{/:name}').exec('/x/shape')?.query) === '{}');
 assert(url3('/x{/:name}').exec('/search') === null);
 
