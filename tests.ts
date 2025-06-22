@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import {string, z} from 'zod';
 import {createURLSchema} from '.';
 
 let k = 0;
@@ -122,5 +122,31 @@ assert(match2('/test', '/text') === null);
 
 assert(validate2('/sections/10') === true);
 assert(validate2('/x') === true);
+
+console.log('\noptionals');
+
+let {url: url3} = createURLSchema({
+    '/sections/:id': {
+        params: z.object({
+            id: z.coerce.number(),
+        }),
+        query: z.optional(z.object({
+            x: z.coerce.number(),
+            y: z.coerce.number(),
+        })),
+    },
+});
+
+assert(url3('/sections/:id', {params: {id: 1}}).toString() === '/sections/1');
+assert(url3('/sections/:id').toString() === '/sections/:id');
+
+assert(
+    JSON.stringify(url3('/sections/:id').exec('/sections/42')?.params) ===
+        '{"id":42}',
+);
+assert(
+    JSON.stringify(url3('/sections/:id').exec('/sections/42')?.query) === '{}',
+);
+assert(url3('/sections/:id').exec('/x/42') === null);
 
 console.log('\npassed');
