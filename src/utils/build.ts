@@ -27,24 +27,21 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
     let urlQuery = getQuery(url);
     let urlHash = getHash(url);
 
-    if ('params' in data && data.params) {
-        let pathParams: Record<string, string | string[] | undefined> = {};
+    let pathParams: Record<string, string | string[] | undefined> = {};
 
-        for (let [key, value] of Object.entries(data.params)) {
-            if (value === null) continue;
-            if (value === undefined || typeof value === 'string')
-                pathParams[key] = value;
-            else if (Array.isArray(value))
-                pathParams[key] = value.map(x => String(x));
-            else pathParams[key] = String(value);
-        }
-
-        let toPath = compile(urlPath);
-        urlPath = toPath(pathParams);
+    for (let [key, value] of Object.entries(data.params ?? {})) {
+        if (value === null) continue;
+        if (value === undefined || typeof value === 'string')
+            pathParams[key] = value;
+        else if (Array.isArray(value))
+            pathParams[key] = value.map(x => String(x));
+        else pathParams[key] = String(value);
     }
 
-    if ('query' in data && data.query)
-        urlQuery = queryString.stringify(data.query);
+    let toPath = compile(urlPath);
+
+    urlPath = toPath(pathParams);
+    urlQuery = queryString.stringify(data.query ?? {});
 
     if (urlQuery !== '' && !urlQuery.startsWith('?')) urlQuery = `?${urlQuery}`;
 

@@ -1,4 +1,4 @@
-import {string, z} from 'zod';
+import {z} from 'zod';
 import {createURLSchema} from '.';
 
 let k = 0;
@@ -135,6 +135,11 @@ let {url: url3} = createURLSchema({
             y: z.coerce.number(),
         })),
     },
+    '/x{/:name}': {
+        params: z.optional(z.object({
+            name: z.string(),
+        })),
+    },
 });
 
 assert(url3('/sections/:id', {params: {id: 1}}).toString() === '/sections/1');
@@ -148,5 +153,15 @@ assert(
     JSON.stringify(url3('/sections/:id').exec('/sections/42')?.query) === '{}',
 );
 assert(url3('/sections/:id').exec('/x/42') === null);
+
+assert(url3('/x{/:name}', {}).toString() === '/x');
+assert(url3('/x{/:name}', {params: undefined}).toString() === '/x');
+assert(url3('/x{/:name}', {params: {name: 'shape'}}).toString() === '/x/shape');
+
+assert(JSON.stringify(url3('/x{/:name}').exec('/x')?.params) === '{}');
+assert(JSON.stringify(url3('/x{/:name}').exec('/x')?.query) === '{}');
+assert(JSON.stringify(url3('/x{/:name}').exec('/x/shape')?.params) === '{"name":"shape"}');
+assert(JSON.stringify(url3('/x{/:name}').exec('/x/shape')?.query) === '{}');
+assert(url3('/x{/:name}').exec('/search') === null);
 
 console.log('\npassed');

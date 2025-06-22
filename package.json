@@ -32,7 +32,7 @@
   "dependencies": {
     "path-to-regexp": "^8.2.0",
     "query-string": "^9.2.0",
-    "unpack-schema": "^1.2.1"
+    "unpack-schema": "^1.2.2"
   },
   "devDependencies": {
     "@types/node": "^24.0.1",
