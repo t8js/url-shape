@@ -32,6 +32,8 @@ If you are using Zod, remember to use the `.coerce` part in the schema for non-s
 
 ```ts
 url('/sections/:id', {params: {id: 10}}).href // '/sections/10'
+url('/sections/:id', {params: {id: 10}}).toString() // '/sections/10'
+String(url('/sections/:id', {params: {id: 10}})) // '/sections/10'
 
 url('/sections/:id').exec('/sections/42') // {params: {id: 42}}
 url('/sections/:id').exec('/x/42') // null
