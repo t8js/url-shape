@@ -9,8 +9,6 @@ export type UnpackedQuerySchema<
     P extends keyof S = keyof S,
 > = S extends null
     ? Record<string, string | string[]>
-    : NonNullable<S>[P] extends {query?: RX}
-      ? Record<string, never>
-      : NonNullable<S>[P] extends {query: R}
-        ? UnpackedSchema<NonNullable<NonNullable<S>[P]>['query']>
-        : Record<string, never>;
+    : NonNullable<S>[P] extends {query?: R | RX}
+      ? UnpackedSchema<NonNullable<NonNullable<S>[P]>['query']>
+      : Record<string, never>;
