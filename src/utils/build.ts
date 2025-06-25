@@ -1,8 +1,8 @@
 import {compile} from 'path-to-regexp';
+import {QuasiURL} from 'quasiurl';
 import qs from 'query-string';
 import type {UnpackedURLSchema} from 'unpack-schema';
 import type {URLMapSchema} from '../types/URLMapSchema';
-import {QuasiURL} from './QuasiURL';
 
 type DefaultURLBuilderDataShape = {
     params?: Record<string, unknown>;

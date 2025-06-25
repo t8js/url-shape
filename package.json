@@ -31,6 +31,7 @@
   ],
   "dependencies": {
     "path-to-regexp": "^8.2.0",
+    "quasiurl": "^1.0.0",
     "query-string": "^9.2.0",
     "unpack-schema": "^1.2.2"
   },

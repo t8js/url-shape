@@ -1,11 +1,11 @@
 import {match as matchParams} from 'path-to-regexp';
+import {QuasiURL} from 'quasiurl';
 import qs from 'query-string';
 import type {UnpackedParamsSchema} from '../types/UnpackedParamsSchema';
 import type {UnpackedQuerySchema} from '../types/UnpackedQuerySchema';
 import type {URLMapSchema} from '../types/URLMapSchema';
 import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import {parseObject} from './parseObject';
-import {QuasiURL} from './QuasiURL';
 import {withEqualOrigin} from './withEqualOrigin';
 
 export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
