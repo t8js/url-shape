@@ -5,8 +5,8 @@ import type {UnpackedQuerySchema} from '../types/UnpackedQuerySchema';
 import type {URLMapSchema} from '../types/URLMapSchema';
 import type {URLMapSchemaEntry} from '../types/URLMapSchemaEntry';
 import {parseObject} from './parseObject';
-import {withEqualOrigin} from './withEqualOrigin';
 import {QuasiURL} from './QuasiURL';
+import {withEqualOrigin} from './withEqualOrigin';
 
 export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
     url: string,
