@@ -1,11 +1,8 @@
 import {compile} from 'path-to-regexp';
-import queryString from 'query-string';
+import qs from 'query-string';
 import type {UnpackedURLSchema} from 'unpack-schema';
 import type {URLMapSchema} from '../types/URLMapSchema';
-import {getHash} from './getHash';
-import {getOrigin} from './getOrigin';
-import {getPath} from './getPath';
-import {getQuery} from './getQuery';
+import {QuasiURL} from './QuasiURL';
 
 type DefaultURLBuilderDataShape = {
     params?: Record<string, unknown>;
@@ -22,10 +19,7 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
 
     if (data === null || data === undefined) return url;
 
-    let urlOrigin = getOrigin(url);
-    let urlPath = getPath(url);
-    let urlQuery = getQuery(url);
-    let urlHash = getHash(url);
+    let {origin, pathname: path, hash} = new QuasiURL(url);
 
     let pathParams: Record<string, string | string[] | undefined> = {};
 
@@ -38,14 +32,13 @@ export function build<S extends URLMapSchema, P extends keyof S = keyof S>(
         else pathParams[key] = String(value);
     }
 
-    let toPath = compile(urlPath);
+    let toPath = compile(path);
 
-    urlPath = toPath(pathParams);
-    urlQuery = queryString.stringify(data.query ?? {});
+    path = toPath(pathParams);
 
-    if (urlQuery !== '' && !urlQuery.startsWith('?')) urlQuery = `?${urlQuery}`;
+    let query = qs.stringify(data.query ?? {});
 
-    url = `${urlOrigin}${urlPath}${urlQuery}${urlHash}`;
+    if (query !== '' && !query.startsWith('?')) query = `?${query}`;
 
-    return url;
+    return `${origin}${path}${query}${hash}`;
 }
