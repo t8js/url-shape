@@ -10,9 +10,10 @@
     "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral --external:path-to-regexp --external:query-string",
     "compile-tests": "npx esbuild tests.ts --bundle --outdir=dist --platform=neutral",
     "prepublishOnly": "npm run build",
-    "preversion": "npx npm-run-all shape build test",
+    "preversion": "npx npm-run-all typecheck shape build test",
     "shape": "npx codeshape",
-    "test": "node dist/tests.js"
+    "test": "node dist/tests.js",
+    "typecheck": "tsc --noEmit"
   },
   "author": "axtk",
   "license": "ISC",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.1",
+    "typescript": "^5.9.2",
     "zod": "^3.25.63"
   }
 }
