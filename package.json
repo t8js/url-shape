@@ -19,7 +19,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git://github.com/axtk/url-shape.git"
+    "url": "git://github.com/t8js/url-shape.git"
   },
   "keywords": [
     "url builder",
