@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx npm-run-all clean -p compile compile-tests",
-    "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true });\"",
     "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral --external:path-to-regexp --external:query-string",
     "compile-tests": "npx esbuild tests.ts --bundle --outdir=dist --platform=neutral",
     "prepublishOnly": "npm run build",

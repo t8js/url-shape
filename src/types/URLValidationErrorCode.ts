@@ -1,1 +1,1 @@
-export type URLValidationErrorCode = 'not_found' | 'invalid';
+export type URLValidationErrorCode = "not_found" | "invalid";
