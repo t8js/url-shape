@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "author": "axtk",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/t8js/url-shape.git"
