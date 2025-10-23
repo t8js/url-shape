@@ -1,8 +1,12 @@
-import { URLComponents } from "../types/URLComponents";
-import { URLSchema } from "../types/URLSchema";
+import type { URLComponents } from "../types/URLComponents";
+import type { URLSchema } from "../types/URLSchema";
 
 function isEmpty(x: unknown) {
-  return x === null || x === undefined || (typeof x === "object" && Object.keys(x).length === 0);
+  return (
+    x === null ||
+    x === undefined ||
+    (typeof x === "object" && Object.keys(x).length === 0)
+  );
 }
 
 function removeEmptyEntries(x: Record<string, unknown>) {
@@ -11,7 +15,7 @@ function removeEmptyEntries(x: Record<string, unknown>) {
   for (let [k, v] of Object.entries(x)) {
     if (!isEmpty(v)) result[k] = v;
   }
-  
+
   return result;
 }
 
@@ -25,8 +29,7 @@ export function parseObject(
 
   let result = schema["~standard"].validate(adjustedValue);
 
-  if (result instanceof Promise || result.issues)
-    return null;
+  if (result instanceof Promise || result.issues) return null;
 
   return result.value;
 }

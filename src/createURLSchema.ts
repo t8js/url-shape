@@ -1,16 +1,22 @@
-import { BaselineURLComponents } from "./types/BaselineURLComponents";
-import { EmptyURLComponents } from "./types/EmptyURLComponents";
-import { UnpackedURLSchema } from "./types/UnpackedURLSchema";
+import type { BaselineURLComponents } from "./types/BaselineURLComponents";
+import type { EmptyURLComponents } from "./types/EmptyURLComponents";
+import type { UnpackedURLSchema } from "./types/UnpackedURLSchema";
 import type { URLSchemaMap } from "./types/URLSchemaMap";
 import { build } from "./utils/build";
 import { match } from "./utils/match";
 
 export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
-  if (schema !== null && Object.values(schema).some(entry => !("~standard" in entry)))
-    throw new TypeError("Malformed URL schema. All entries should conform to the Standard Schema specification. See https://standardschema.dev/");
+  if (
+    schema !== null &&
+    Object.values(schema).some((entry) => !("~standard" in entry))
+  )
+    throw new TypeError(
+      "Malformed URL schema. All entries should conform to the Standard Schema specification. See https://standardschema.dev/",
+    );
 
-  type URLShape<P extends keyof S> =
-    S extends null ? BaselineURLComponents : UnpackedURLSchema<NonNullable<S>[P]>;
+  type URLShape<P extends keyof S> = S extends null
+    ? BaselineURLComponents
+    : UnpackedURLSchema<NonNullable<S>[P]>;
 
   type MatchShape<P extends keyof S> = URLShape<P> &
     Omit<EmptyURLComponents, keyof URLShape<P>> & {
@@ -27,7 +33,7 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
     ) => {
       let url = build(String(pattern), data);
       let urlSchema = (schema as S)?.[pattern];
-  
+
       return {
         _pattern: pattern,
         _schema: urlSchema,
@@ -46,8 +52,7 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
       if (!schema) return true;
 
       for (let [urlPattern, urlSchema] of Object.entries(schema)) {
-        if (match(url, urlPattern, urlSchema) !== null)
-          return true;
+        if (match(url, urlPattern, urlSchema) !== null) return true;
       }
 
       return false;

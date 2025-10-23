@@ -1,4 +1,5 @@
-import { StandardSchemaV1 } from "@standard-schema/spec";
-import { URLSchema } from "./URLSchema";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
+import type { URLSchema } from "./URLSchema";
 
-export type UnpackedURLSchema<S extends URLSchema> = StandardSchemaV1.InferOutput<S>;
+export type UnpackedURLSchema<S extends URLSchema> =
+  StandardSchemaV1.InferOutput<S>;

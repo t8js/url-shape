@@ -10,12 +10,13 @@ export function match(
   urlSchema?: URLSchema | null | undefined,
 ) {
   let { origin, pathname, search, hash } = new QuasiURL(url);
-  let { origin: patternOrigin, pathname: patternPathname } = new QuasiURL(pattern);
+  let { origin: patternOrigin, pathname: patternPathname } = new QuasiURL(
+    pattern,
+  );
 
   if (!withEqualOrigin(origin, patternOrigin)) return null;
 
-  if (urlSchema === null)
-    return url === pattern ? { hash } : null;
+  if (urlSchema === null) return url === pattern ? { hash } : null;
 
   let matchPattern = matchParams(patternPathname);
   let paramsMatch = matchPattern(pathname);
@@ -24,7 +25,7 @@ export function match(
 
   let params = paramsMatch.params;
   let query = Object.fromEntries(new URLSearchParams(search));
-  
+
   let parseResult = parseObject({ params, query }, urlSchema);
 
   if (parseResult === null) return null;

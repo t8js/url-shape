@@ -42,9 +42,7 @@ assert(
   JSON.stringify(url("/sections/:id").exec("/sections/42")?.params) ===
     '{"id":42}',
 );
-assert(
-  url("/sections/:id").exec("/sections/42")?.query === undefined,
-);
+assert(url("/sections/:id").exec("/sections/42")?.query === undefined);
 assert(url("/sections/:id").exec("/x/42") === null);
 assert(url("/").exec("/x") === null);
 
@@ -66,9 +64,7 @@ assert(
   JSON.stringify(url("/search").exec("/search?term=test")?.query) ===
     '{"term":"test"}',
 );
-assert(
-  url("/search").exec("/search?term=test")?.params === undefined,
-);
+assert(url("/search").exec("/search?term=test")?.params === undefined);
 assert(
   JSON.stringify(url("/search").exec("/search?term=test&view=full")?.query) ===
     '{"term":"test","view":"full"}',
@@ -114,7 +110,8 @@ assert(
     '{"id":"10"}',
 );
 assert(
-  JSON.stringify(url2("/x/:name").exec("/x/intro")?.params) === '{"name":"intro"}',
+  JSON.stringify(url2("/x/:name").exec("/x/intro")?.params) ===
+    '{"name":"intro"}',
 );
 assert(url2("/test").exec("/test")?.params === undefined);
 assert(url2("/test").exec("/text") === null);
@@ -154,9 +151,7 @@ assert(
   JSON.stringify(url3("/sections/:id").exec("/sections/42")?.params) ===
     '{"id":42}',
 );
-assert(
-  url3("/sections/:id").exec("/sections/42")?.query === undefined,
-);
+assert(url3("/sections/:id").exec("/sections/42")?.query === undefined);
 assert(url3("/sections/:id").exec("/x/42") === null);
 
 assert(url3("/x{/:name}", {}).toString() === "/x");

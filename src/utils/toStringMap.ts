@@ -1,4 +1,6 @@
-export function toStringMap(x: Record<string, unknown> | undefined): Record<string, string> {
+export function toStringMap(
+  x: Record<string, unknown> | undefined,
+): Record<string, string> {
   if (!x) return {};
 
   let xs: Record<string, string> = {};

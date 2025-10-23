@@ -1,6 +1,6 @@
 import { compile } from "path-to-regexp";
 import { QuasiURL } from "quasiurl";
-import { URLComponents } from "../types/URLComponents";
+import type { URLComponents } from "../types/URLComponents";
 import { toStringMap } from "./toStringMap";
 
 export function build(pattern: string, data?: URLComponents) {
