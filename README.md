@@ -6,33 +6,35 @@
 
 Installation: `npm i url-shape`
 
-## Creating a URL schema with Zod or Yup
+## Creating a URL schema with validation libs like Zod
 
 ```ts
 import { createURLSchema } from "url-shape";
 import { z } from "zod";
 
-export const { url, match, validate } = createURLSchema({
-  "/": null, // goes without parameters
-  "/sections/:id": {
+export const { url, validate } = createURLSchema({
+  "/": z.object({}), // Goes without parameters
+  "/sections/:id": z.object({
     params: z.object({
       id: z.coerce.number(),
     }),
-  },
-  "/search": {
+  }),
+  "/search": z.object({
     query: z.object({
       term: z.string(),
       view: z.optional(z.enum(["full", "compact"])),
     }),
-  },
+  }),
 });
 ```
 
-With Zod, remember to use the `.coerce` part in the schema for non-string parameters so that string URL components are converted to the preferred types.
+🔹 `createURLSchema()` accepts a URL schema defined with any validation lib supporting the [Standard Schema](https://github.com/standard-schema/standard-schema#readme) spec, including Zod, ArkType, Valibot, or Yup. 
+
+🔹 With Zod, mind the `.coerce` part in the schema for non-string parameters so that string URL components are converted to the preferred types.
 
 ## Using a URL schema
 
-Use the functions returned from `createURLSchema()` to build, match, and validate URLs in a type-safe manner. A type-aware code editor will highlight typos in the URLs and type mismatches in their parameters.
+Use the functions returned from `createURLSchema()` to build and validate URLs in a type-safe manner. A type-aware code editor will highlight typos in the URLs and type mismatches in their parameters.
 
 ```ts
 url("/sections/:id", { params: { id: 10 } }).href // "/sections/10"
@@ -45,9 +47,6 @@ url("/sections/:id").exec("/x/42") // null
 url("/sections/:id").compile({ params: { id: 10 } }) // "/sections/10"
 url("/search").compile({ query: { term: "shape" } }) // "/search?term=shape"
 
-match("/sections/:id", "/sections/10") // { params: { id: 10 } }
-match("/sections/:id", "/x") // null
-
 validate("/sections/10") // true, found in the schema
 validate("/x") // false, not found in the schema
 ```
@@ -57,9 +56,9 @@ validate("/x") // false, not found in the schema
 By having `null` as a URL schema, the URL builder can be used without schema validation:
 
 ```ts
-const { url, match, validate } = createURLSchema(null);
+const { url, validate } = createURLSchema(null);
 
 url("/sections/:id", { params: { id: "x" } }) // "/sections/x"
-match("/x/:name", "/x/intro") // { params: { name: "intro" } }
+url("/x/:name").exec("/x/intro") // { params: { name: "intro" } }
 validate("/x") // true, all URLs are fine when there's no schema
 ```
