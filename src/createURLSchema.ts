@@ -1,23 +1,56 @@
-import type { Pattern } from "./types/Pattern";
-import type { URLMapSchema } from "./types/URLMapSchema";
-import type { URLMapSchemaEntry } from "./types/URLMapSchemaEntry";
-import { getURLBuilder } from "./utils/getURLBuilder";
-import { isPatternObject } from "./utils/isPatternObject";
+import { BaselineURLComponents } from "./types/BaselineURLComponents";
+import { EmptyURLComponents } from "./types/EmptyURLComponents";
+import { UnpackedURLSchema } from "./types/UnpackedURLSchema";
+import type { URLSchemaMap } from "./types/URLSchemaMap";
+import { build } from "./utils/build";
 import { match } from "./utils/match";
-import { validate } from "./utils/validate";
 
-export function createURLSchema<S extends URLMapSchema>(schema: S) {
+export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
+  if (schema !== null && Object.values(schema).some(entry => !("~standard" in entry)))
+    throw new TypeError("Malformed URL schema. All entries should conform to the Standard Schema specification. See https://standardschema.dev/");
+
+  type URLShape<P extends keyof S> =
+    S extends null ? BaselineURLComponents : UnpackedURLSchema<NonNullable<S>[P]>;
+
+  type MatchShape<P extends keyof S> = URLShape<P> &
+    Omit<EmptyURLComponents, keyof URLShape<P>> & {
+      hash: string;
+    };
+
   return {
-    url: getURLBuilder<S>(schema),
-    validate: (url: string) => validate<S>(url, schema),
-    match: <P extends keyof S>(pattern: Pattern<S, P>, url: string) => {
-      let stringPattern = isPatternObject(pattern) ? pattern.href : pattern;
+    /**
+     * Returns a type-aware URL builder.
+     */
+    url: <P extends keyof S>(
+      pattern: S extends null ? string : P,
+      data?: URLShape<P>,
+    ) => {
+      let url = build(String(pattern), data);
+      let urlSchema = (schema as S)?.[pattern];
+  
+      return {
+        _pattern: pattern,
+        _schema: urlSchema,
+        href: url,
+        exec: (location: string) => {
+          return match(location, url, urlSchema) as MatchShape<P> | null;
+        },
+        compile: (input: URLShape<P>) => build(String(pattern), input),
+        toString: () => url,
+      };
+    },
+    /**
+     * Checks whether `url` matches any entries in the schema.
+     */
+    validate: (url: string) => {
+      if (!schema) return true;
 
-      return match<S, P>(
-        url,
-        stringPattern as string,
-        (schema as S)?.[stringPattern as P] as URLMapSchemaEntry<S, P>,
-      );
+      for (let [urlPattern, urlSchema] of Object.entries(schema)) {
+        if (match(url, urlPattern, urlSchema) !== null)
+          return true;
+      }
+
+      return false;
     },
   };
 }

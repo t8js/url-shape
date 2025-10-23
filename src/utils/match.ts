@@ -1,64 +1,33 @@
 import { match as matchParams } from "path-to-regexp";
 import { QuasiURL } from "quasiurl";
-import qs from "query-string";
-import type { UnpackedParamsSchema } from "../types/UnpackedParamsSchema";
-import type { UnpackedQuerySchema } from "../types/UnpackedQuerySchema";
-import type { URLMapSchema } from "../types/URLMapSchema";
-import type { URLMapSchemaEntry } from "../types/URLMapSchemaEntry";
+import type { URLSchema } from "../types/URLSchema";
 import { parseObject } from "./parseObject";
 import { withEqualOrigin } from "./withEqualOrigin";
 
-export function match<S extends URLMapSchema, P extends keyof S = keyof S>(
+export function match(
   url: string,
   pattern: string,
-  urlSchema?: URLMapSchemaEntry<S, P>,
+  urlSchema?: URLSchema | null | undefined,
 ) {
-  let { origin, pathname: path, search: queryString, hash } = new QuasiURL(url);
-  let { origin: patternOrigin, pathname: patternPath } = new QuasiURL(pattern);
+  let { origin, pathname, search, hash } = new QuasiURL(url);
+  let { origin: patternOrigin, pathname: patternPathname } = new QuasiURL(pattern);
 
   if (!withEqualOrigin(origin, patternOrigin)) return null;
 
-  type Params = UnpackedParamsSchema<S, P>;
-  type Query = UnpackedQuerySchema<S, P>;
+  if (urlSchema === null)
+    return url === pattern ? { hash } : null;
 
-  let paramsSchema = urlSchema?.params;
-  let params = {} as Params | null;
-
-  let querySchema = urlSchema?.query;
-  let query = {} as Query | null;
-
-  if (urlSchema === null) {
-    if (url !== pattern) return null;
-
-    return {
-      input: url,
-      url: pattern,
-      params,
-      query,
-      hash,
-    };
-  }
-
-  let matchPattern = matchParams(patternPath);
-  let paramsMatch = matchPattern(path);
+  let matchPattern = matchParams(patternPathname);
+  let paramsMatch = matchPattern(pathname);
 
   if (paramsMatch === false) return null;
 
-  params = parseObject(paramsMatch.params, paramsSchema);
+  let params = paramsMatch.params;
+  let query = Object.fromEntries(new URLSearchParams(search));
+  
+  let parseResult = parseObject({ params, query }, urlSchema);
 
-  if (paramsSchema && params === null) return null;
+  if (parseResult === null) return null;
 
-  let queryMatch = qs.parse(queryString);
-
-  query = parseObject(queryMatch, querySchema);
-
-  if (querySchema && query === null) return null;
-
-  return {
-    input: url,
-    url: pattern,
-    params,
-    query,
-    hash,
-  };
+  return { ...parseResult, hash };
 }

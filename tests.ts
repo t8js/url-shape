@@ -17,19 +17,19 @@ function assert(predicate: boolean) {
 
 console.log("fixed, params, query");
 
-let { url, match, validate } = createURLSchema({
-  "/": null,
-  "/sections/:id": {
+let { url, validate } = createURLSchema({
+  "/": z.object({}),
+  "/sections/:id": z.object({
     params: z.object({
       id: z.coerce.number(),
     }),
-  },
-  "/search": {
+  }),
+  "/search": z.object({
     query: z.object({
       term: z.string(),
       view: z.optional(z.enum(["full", "compact"])),
     }),
-  },
+  }),
 });
 
 assert(url("/").toString() === "/");
@@ -43,7 +43,7 @@ assert(
     '{"id":42}',
 );
 assert(
-  JSON.stringify(url("/sections/:id").exec("/sections/42")?.query) === "{}",
+  url("/sections/:id").exec("/sections/42")?.query === undefined,
 );
 assert(url("/sections/:id").exec("/x/42") === null);
 assert(url("/").exec("/x") === null);
@@ -67,7 +67,7 @@ assert(
     '{"term":"test"}',
 );
 assert(
-  JSON.stringify(url("/search").exec("/search?term=test")?.params) === "{}",
+  url("/search").exec("/search?term=test")?.params === undefined,
 );
 assert(
   JSON.stringify(url("/search").exec("/search?term=test&view=full")?.query) ===
@@ -91,23 +91,18 @@ assert(
 );
 
 assert(
-  JSON.stringify(match("/sections/:id", "/sections/10")?.params) ===
-    '{"id":10}',
-);
-assert(
-  JSON.stringify(match(url("/sections/:id"), "/sections/10")?.params) ===
+  JSON.stringify(url("/sections/:id").exec("/sections/10")?.params) ===
     '{"id":10}',
 );
 
-assert(match("/sections/:id", "/x") === null);
-assert(match(url("/sections/:id"), "/x") === null);
+assert(url("/sections/:id").exec("/x") === null);
 
 assert(validate("/sections/10") === true);
 assert(validate("/x") === false);
 
 console.log("\nnull schema");
 
-let { url: url2, match: match2, validate: validate2 } = createURLSchema(null);
+let { url: url2, validate: validate2 } = createURLSchema(null);
 
 assert(url2("/").toString() === "/");
 assert(
@@ -115,14 +110,14 @@ assert(
 );
 
 assert(
-  JSON.stringify(match2("/sections/:id", "/sections/10")?.params) ===
+  JSON.stringify(url2("/sections/:id").exec("/sections/10")?.params) ===
     '{"id":"10"}',
 );
 assert(
-  JSON.stringify(match2("/x/:name", "/x/intro")?.params) === '{"name":"intro"}',
+  JSON.stringify(url2("/x/:name").exec("/x/intro")?.params) === '{"name":"intro"}',
 );
-assert(JSON.stringify(match2("/test", "/test")?.params) === "{}");
-assert(match2("/test", "/text") === null);
+assert(url2("/test").exec("/test")?.params === undefined);
+assert(url2("/test").exec("/text") === null);
 
 assert(validate2("/sections/10") === true);
 assert(validate2("/x") === true);
@@ -130,7 +125,7 @@ assert(validate2("/x") === true);
 console.log("\noptionals");
 
 let { url: url3 } = createURLSchema({
-  "/sections/:id": {
+  "/sections/:id": z.object({
     params: z.object({
       id: z.coerce.number(),
     }),
@@ -140,14 +135,14 @@ let { url: url3 } = createURLSchema({
         y: z.coerce.number(),
       }),
     ),
-  },
-  "/x{/:name}": {
+  }),
+  "/x{/:name}": z.object({
     params: z.optional(
       z.object({
         name: z.string(),
       }),
     ),
-  },
+  }),
 });
 
 assert(
@@ -160,7 +155,7 @@ assert(
     '{"id":42}',
 );
 assert(
-  JSON.stringify(url3("/sections/:id").exec("/sections/42")?.query) === "{}",
+  url3("/sections/:id").exec("/sections/42")?.query === undefined,
 );
 assert(url3("/sections/:id").exec("/x/42") === null);
 
@@ -170,13 +165,13 @@ assert(
   url3("/x{/:name}", { params: { name: "shape" } }).toString() === "/x/shape",
 );
 
-assert(JSON.stringify(url3("/x{/:name}").exec("/x")?.params) === "{}");
-assert(JSON.stringify(url3("/x{/:name}").exec("/x")?.query) === "{}");
+assert(url3("/x{/:name}").exec("/x")?.params === undefined);
+assert(url3("/x{/:name}").exec("/x")?.query === undefined);
 assert(
   JSON.stringify(url3("/x{/:name}").exec("/x/shape")?.params) ===
     '{"name":"shape"}',
 );
-assert(JSON.stringify(url3("/x{/:name}").exec("/x/shape")?.query) === "{}");
+assert(url3("/x{/:name}").exec("/x/shape")?.query === undefined);
 assert(url3("/x{/:name}").exec("/search") === null);
 
 console.log("\npassed");

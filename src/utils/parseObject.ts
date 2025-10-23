@@ -1,28 +1,32 @@
-import type { Schema } from "unpack-schema";
-import { parse } from "./parse";
+import { URLComponents } from "../types/URLComponents";
+import { URLSchema } from "../types/URLSchema";
 
-function isEmpty(value: unknown) {
-  if (value === undefined || value === null || value === "" || value === false)
-    return true;
-
-  if (typeof value === "object") return Object.keys(value).length === 0;
-
-  return false;
+function isEmpty(x: unknown) {
+  return x === null || x === undefined || (typeof x === "object" && Object.keys(x).length === 0);
 }
 
-export function parseObject<T>(value: unknown, schema: Schema | undefined) {
-  let parseResult = {} as T | null;
+function removeEmptyEntries(x: Record<string, unknown>) {
+  let result: Record<string, unknown> = {};
 
-  if (schema) {
-    parseResult = parse(value, schema);
+  for (let [k, v] of Object.entries(x)) {
+    if (!isEmpty(v)) result[k] = v;
+  }
+  
+  return result;
+}
 
-    if (parseResult === null && isEmpty(value))
-      parseResult = parse(undefined, schema);
+export function parseObject(
+  value: URLComponents,
+  schema: URLSchema | undefined,
+) {
+  let adjustedValue = removeEmptyEntries(value) as URLComponents;
 
-    if (parseResult === undefined) return {} as T;
+  if (!schema) return adjustedValue;
 
-    if (parseResult === null || typeof parseResult !== "object") return null;
-  } else if (value !== null) parseResult = value as T;
+  let result = schema["~standard"].validate(adjustedValue);
 
-  return parseResult;
+  if (result instanceof Promise || result.issues)
+    return null;
+
+  return result.value;
 }
