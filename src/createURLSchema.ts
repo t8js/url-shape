@@ -1,5 +1,4 @@
 import type { BaselineURLComponents } from "./types/BaselineURLComponents";
-import type { EmptyURLComponents } from "./types/EmptyURLComponents";
 import type { UnpackedURLSchema } from "./types/UnpackedURLSchema";
 import type { URLSchemaMap } from "./types/URLSchemaMap";
 import { build } from "./utils/build";
@@ -25,10 +24,20 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
         : UnpackedURLSchema<NonNullable<S>[P]>,
     ) => {
       type URLShape = NonNullable<typeof data>;
-      type MatchShape = URLShape &
-        Omit<EmptyURLComponents, keyof URLShape> & {
-          hash: string;
-        };
+
+      type MatchShape = {
+        params: S extends null
+          ? BaselineURLComponents["params"]
+          : UnpackedURLSchema<NonNullable<S>[P]> extends { params?: Record<string, unknown> }
+          ? UnpackedURLSchema<NonNullable<S>[P]>["params"]
+          : undefined;
+        query: S extends null
+          ? BaselineURLComponents["query"]
+          : UnpackedURLSchema<NonNullable<S>[P]> extends { query?: Record<string, unknown> }
+          ? UnpackedURLSchema<NonNullable<S>[P]>["query"]
+          : undefined;
+        hash: string;
+      };
 
       let url = build(String(pattern), data);
       let urlSchema = (schema as S)?.[pattern] as S extends null
