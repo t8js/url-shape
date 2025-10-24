@@ -14,34 +14,33 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
       "Malformed URL schema. All entries should conform to the Standard Schema specification. See https://standardschema.dev/",
     );
 
-  type URLShape<P extends keyof S> = S extends null
-    ? BaselineURLComponents
-    : UnpackedURLSchema<NonNullable<S>[P]>;
-
-  type MatchShape<P extends keyof S> = URLShape<P> &
-    Omit<EmptyURLComponents, keyof URLShape<P>> & {
-      hash: string;
-    };
-
   return {
     /**
      * Returns a type-aware URL builder.
      */
     url: <P extends keyof S>(
       pattern: S extends null ? string : P,
-      data?: URLShape<P>,
+      data?: S extends null
+        ? BaselineURLComponents
+        : UnpackedURLSchema<NonNullable<S>[P]>,
     ) => {
+      type URLShape = NonNullable<typeof data>;
+      type MatchShape = URLShape &
+        Omit<EmptyURLComponents, keyof URLShape> & {
+          hash: string;
+        };
+
       let url = build(String(pattern), data);
-      let urlSchema = (schema as S)?.[pattern]!;
+      let urlSchema = (schema as S)?.[pattern] as S extends null ? undefined : NonNullable<S>[P];
 
       return {
         _pattern: pattern,
         _schema: urlSchema,
         href: url,
         exec: (location: string) => {
-          return match(location, url, urlSchema) as MatchShape<P> | null;
+          return match(location, url, urlSchema) as MatchShape | null;
         },
-        compile: (input: URLShape<P>) => build(String(pattern), input),
+        compile: (input: URLShape) => build(String(pattern), input),
         toString: () => url,
       };
     },
