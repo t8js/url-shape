@@ -28,14 +28,18 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
       type MatchShape = {
         params: S extends null
           ? BaselineURLComponents["params"]
-          : UnpackedURLSchema<NonNullable<S>[P]> extends { params?: Record<string, unknown> }
-          ? UnpackedURLSchema<NonNullable<S>[P]>["params"]
-          : undefined;
+          : UnpackedURLSchema<NonNullable<S>[P]> extends {
+                params?: Record<string, unknown>;
+              }
+            ? UnpackedURLSchema<NonNullable<S>[P]>["params"]
+            : undefined;
         query: S extends null
           ? BaselineURLComponents["query"]
-          : UnpackedURLSchema<NonNullable<S>[P]> extends { query?: Record<string, unknown> }
-          ? UnpackedURLSchema<NonNullable<S>[P]>["query"]
-          : undefined;
+          : UnpackedURLSchema<NonNullable<S>[P]> extends {
+                query?: Record<string, unknown>;
+              }
+            ? UnpackedURLSchema<NonNullable<S>[P]>["query"]
+            : undefined;
         hash: string;
       };
 
