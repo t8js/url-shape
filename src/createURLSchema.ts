@@ -42,7 +42,8 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
         exec: (location: string) => {
           return match(location, url, urlSchema) as MatchShape | null;
         },
-        compile: (input: URLShape | null | undefined) => build(String(pattern), input),
+        compile: (input: URLShape | null | undefined) =>
+          build(String(pattern), input),
         toString: () => url,
       };
     },
