@@ -3,7 +3,7 @@ import { QuasiURL } from "quasiurl";
 import type { URLComponents } from "../types/URLComponents";
 import { toStringMap } from "./toStringMap";
 
-export function build(pattern: string, data?: URLComponents) {
+export function build(pattern: string, data?: URLComponents | null | undefined) {
   let url = String(pattern);
 
   if (data === null || data === undefined) return url;
