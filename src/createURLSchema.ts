@@ -31,7 +31,9 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
         };
 
       let url = build(String(pattern), data);
-      let urlSchema = (schema as S)?.[pattern] as S extends null ? undefined : NonNullable<S>[P];
+      let urlSchema = (schema as S)?.[pattern] as S extends null
+        ? undefined
+        : NonNullable<S>[P];
 
       return {
         _pattern: pattern,
