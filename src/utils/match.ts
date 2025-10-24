@@ -2,7 +2,6 @@ import { match as matchParams } from "path-to-regexp";
 import { QuasiURL } from "quasiurl";
 import type { URLSchema } from "../types/URLSchema";
 import { parseObject } from "./parseObject";
-import { withEqualOrigin } from "./withEqualOrigin";
 
 export function match(
   url: string,
@@ -14,7 +13,7 @@ export function match(
     pattern,
   );
 
-  if (!withEqualOrigin(origin, patternOrigin)) return null;
+  if (origin !== patternOrigin) return null;
 
   if (urlSchema === null) return url === pattern ? { hash } : null;
 
