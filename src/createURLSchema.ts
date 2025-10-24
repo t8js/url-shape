@@ -32,7 +32,7 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
       data?: URLShape<P>,
     ) => {
       let url = build(String(pattern), data);
-      let urlSchema = (schema as S)?.[pattern];
+      let urlSchema = (schema as S)?.[pattern]!;
 
       return {
         _pattern: pattern,
