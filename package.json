@@ -4,8 +4,9 @@
   "description": "Type-safe schema-based URL builder",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npx npm-run-all clean -p compile compile-tests",
+    "build": "npx npm-run-all clean -p compile compile-tests -s types",
     "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true });\"",
     "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral --external:path-to-regexp",
     "compile-tests": "npx esbuild tests.ts --bundle --outdir=dist --platform=neutral",
@@ -13,7 +14,8 @@
     "preversion": "npx npm-run-all typecheck shape build test",
     "shape": "npx codeshape",
     "test": "node dist/tests.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "types": "tsc --emitDeclarationOnly"
   },
   "author": "axtk",
   "license": "MIT",
