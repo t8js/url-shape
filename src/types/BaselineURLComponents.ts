@@ -1,5 +1,5 @@
-import type { Satisfies } from "./Satisfies";
-import type { URLComponents } from "./URLComponents";
+import type { Satisfies } from "./Satisfies.ts";
+import type { URLComponents } from "./URLComponents.ts";
 
 export type BaselineURLComponents = Satisfies<
   URLComponents,

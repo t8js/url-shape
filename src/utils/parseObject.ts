@@ -1,5 +1,5 @@
-import type { URLComponents } from "../types/URLComponents";
-import type { URLSchema } from "../types/URLSchema";
+import type { URLComponents } from "../types/URLComponents.ts";
+import type { URLSchema } from "../types/URLSchema.ts";
 
 function isEmpty(x: unknown) {
   return (

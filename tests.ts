@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createURLSchema } from ".";
+import { createURLSchema } from "./index.ts";
 
 let k = 0;
 

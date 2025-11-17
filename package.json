@@ -33,7 +33,7 @@
   "dependencies": {
     "@standard-schema/spec": "^1.0.0",
     "path-to-regexp": "^8.3.0",
-    "quasiurl": "^1.1.2"
+    "quasiurl": "^1.1.3"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",

@@ -1,7 +1,7 @@
 import { compile } from "path-to-regexp";
 import { QuasiURL } from "quasiurl";
-import type { URLComponents } from "../types/URLComponents";
-import { toStringMap } from "./toStringMap";
+import type { URLComponents } from "../types/URLComponents.ts";
+import { toStringMap } from "./toStringMap.ts";
 
 export function build(
   pattern: string,

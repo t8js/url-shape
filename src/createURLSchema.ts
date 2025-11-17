@@ -1,8 +1,8 @@
-import type { BaselineURLComponents } from "./types/BaselineURLComponents";
-import type { UnpackedURLSchema } from "./types/UnpackedURLSchema";
-import type { URLSchemaMap } from "./types/URLSchemaMap";
-import { build } from "./utils/build";
-import { match } from "./utils/match";
+import type { BaselineURLComponents } from "./types/BaselineURLComponents.ts";
+import type { UnpackedURLSchema } from "./types/UnpackedURLSchema.ts";
+import type { URLSchemaMap } from "./types/URLSchemaMap.ts";
+import { build } from "./utils/build.ts";
+import { match } from "./utils/match.ts";
 
 export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
   if (

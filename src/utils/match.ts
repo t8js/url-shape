@@ -1,7 +1,7 @@
 import { match as matchParams } from "path-to-regexp";
 import { QuasiURL } from "quasiurl";
-import type { URLSchema } from "../types/URLSchema";
-import { parseObject } from "./parseObject";
+import type { URLSchema } from "../types/URLSchema.ts";
+import { parseObject } from "./parseObject.ts";
 
 export function match(
   url: string,
