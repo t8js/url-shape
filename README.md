@@ -1,6 +1,6 @@
 # URL Shape
 
-*Type-safe schema-based URL builder*
+Type-safe schema-based URL builder
 
 [![npm](https://img.shields.io/npm/v/url-shape?labelColor=345&color=46e)](https://www.npmjs.com/package/url-shape) ![Lightweight](https://img.shields.io/bundlephobia/minzip/url-shape?label=minzip&labelColor=345&color=46e)
 
@@ -34,7 +34,7 @@ export const { url, validate } = createURLSchema({
 
 ## Using a URL schema
 
-Use the functions returned from `createURLSchema()` to build and validate URLs in a type-safe manner. A type-aware code editor will highlight typos in the URLs and type mismatches in their parameters.
+Use the functions returned from `createURLSchema()` to build and validate URLs in a type-safe manner. A type-aware code editor highlights typos in the URLs and type mismatches in their parameters.
 
 ```ts
 url("/sections/:id", { params: { id: 10 } }).href // "/sections/10"
