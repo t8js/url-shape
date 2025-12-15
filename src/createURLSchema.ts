@@ -4,6 +4,10 @@ import type { URLSchemaMap } from "./types/URLSchemaMap.ts";
 import { build } from "./utils/build.ts";
 import { match } from "./utils/match.ts";
 
+/**
+ * Returns the functions to build and validate URLs in a type-safe manner
+ * based on the given schema.
+ */
 export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
   if (
     schema !== null &&
@@ -15,7 +19,23 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
 
   return {
     /**
-     * Returns a type-aware URL builder.
+     * A type-aware URL builder. Returns a URL pattern object with filled
+     * out parameters or without, which can be converted to a URL string
+     * either by reading its `href` property, by calling its `toString()`
+     * method or by coercing it to a string.
+     *
+     * @example
+     * ```js
+     * url("/sections/:id", { params: { id: 10 } }).href // "/sections/10"
+     * url("/sections/:id", { params: { id: 10 } }).toString() // "/sections/10"
+     * String(url("/sections/:id", { params: { id: 10 } })) // "/sections/10"
+     * ```
+     *
+     * @param pattern - A URL pattern, one of the keys of the schema passed to
+     * `createURLSchema()` that produced this URL builder.
+     * @param data - An optional parameter that contains path placeholder values
+     * and query parameters (`{ params?, query? }`) matching the URL pattern
+     * schema.
      */
     url: <P extends keyof S>(
       pattern: S extends null ? string : P,
@@ -43,7 +63,7 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
         hash: string;
       };
 
-      let url = build(String(pattern), data);
+      let compiledURL = build(String(pattern), data);
       let urlSchema = (schema as S)?.[pattern] as S extends null
         ? undefined
         : NonNullable<S>[P];
@@ -51,17 +71,26 @@ export function createURLSchema<S extends URLSchemaMap | null>(schema: S) {
       return {
         _pattern: pattern,
         _schema: urlSchema,
-        href: url,
-        exec: (location: string) => {
-          return match(location, url, urlSchema) as MatchShape | null;
+        href: compiledURL,
+        /**
+         * Parses the `url` parameter based on the URL pattern and the
+         * schema this URL pattern originates from.
+         */
+        exec: (url: string) => {
+          return match(url, compiledURL, urlSchema) as MatchShape | null;
         },
+        /**
+         * Returns a URL string by filling out the URL pattern parameters
+         * from `input`.
+         */
         compile: (input: URLShape | null | undefined) =>
           build(String(pattern), input),
-        toString: () => url,
+        toString: () => compiledURL,
       };
     },
     /**
-     * Checks whether `url` matches any entries in the schema.
+     * Checks whether `url` matches any entries in the schema passed to
+     * `createURLSchema()` that produced this URL validator.
      */
     validate: (url: string) => {
       if (!schema) return true;
