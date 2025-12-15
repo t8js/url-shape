@@ -28,9 +28,9 @@ export const { url, validate } = createURLSchema({
 });
 ```
 
-🔹 `createURLSchema()` accepts a URL schema defined with any validation lib supporting the [Standard Schema](https://github.com/standard-schema/standard-schema#readme) spec, including Zod, ArkType, Valibot, or Yup. 
+⬥ `createURLSchema()` accepts a URL schema defined with any validation lib supporting the [Standard Schema](https://github.com/standard-schema/standard-schema#readme) spec, including Zod, ArkType, Valibot, or Yup. 
 
-🔹 With Zod, mind the `.coerce` part in the schema for non-string parameters so that string URL components are converted to the preferred types.
+⬥ With Zod, mind the `.coerce` part in the schema for non-string parameters so that string URL components are converted to the preferred types.
 
 ## Using a URL schema
 
