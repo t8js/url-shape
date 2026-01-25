@@ -2,10 +2,6 @@
 
 Type-safe schema-based URL builder
 
-[![npm](https://img.shields.io/npm/v/url-shape?labelColor=345&color=46e)](https://www.npmjs.com/package/url-shape) ![Lightweight](https://img.shields.io/bundlephobia/minzip/url-shape?label=minzip&labelColor=345&color=46e)
-
-Installation: `npm i url-shape`
-
 ## Creating a URL schema with validation libs like Zod
 
 ```ts
